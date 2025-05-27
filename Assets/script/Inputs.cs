@@ -1,35 +1,40 @@
 using UnityEngine;
 
-public class InputsController : MonoBehaviour
+public class FlipperController : MonoBehaviour
 {
-    [Header("Transform")]
-    public Transform lancador;
-
-    [Header("Hinges Joints")]
-    public HingeJoint2D hjLeft;
-    public HingeJoint2D hjRight;
-
-    [Header("Spring Joint")]
-    public SpringJoint2D spOfLancador;
-
-    void Start()
-    {
-        lancador = GetComponent<Transform>();
-        hjLeft = GetComponent<HingeJoint2D>();
-        hjRight = GetComponent<HingeJoint2D>();
-        spOfLancador = GetComponent<SpringJoint2D>();
-    }
+    public HingeJoint2D leftFlipper;
+    public HingeJoint2D rightFlipper;
+    public float motorSpeed = 1000f;
+    public float motorMaxTorque = 10000f;
 
     void Update()
     {
-        HandleInputs();
+        
+        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+        {
+            SetMotor(leftFlipper, motorSpeed);
+        }
+        else
+        {
+            SetMotor(leftFlipper, -motorSpeed);
+        }
+
+        
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+        {
+            SetMotor(rightFlipper, -motorSpeed);
+        }
+        else
+        {
+            SetMotor(rightFlipper, motorSpeed);
+        }
     }
 
-    void HandleInputs()
+    void SetMotor(HingeJoint2D hinge, float speed)
     {
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            
-        }
+        JointMotor2D motor = hinge.motor;
+        motor.motorSpeed = speed;
+        motor.maxMotorTorque = motorMaxTorque;
+        hinge.motor = motor;
     }
 }
